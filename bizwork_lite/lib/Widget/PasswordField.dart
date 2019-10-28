@@ -9,18 +9,14 @@ class PasswordField extends StatefulWidget {
     this.hintText,
     this.labelText,
     this.helperText,
-    this.onSaved,
-    this.validator,
-    this.onFieldSubmitted,
+    this.controller,
   });
 
   final Key fieldKey;
   final String hintText;
   final String labelText;
   final String helperText;
-  final FormFieldSetter<String> onSaved;
-  final FormFieldValidator<String> validator;
-  final ValueChanged<String> onFieldSubmitted;
+  final TextEditingController controller;
 
   @override
   _PasswordFieldState createState() => _PasswordFieldState();
@@ -31,13 +27,11 @@ class _PasswordFieldState extends State<PasswordField> {
 
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
+    return TextField(
       key: widget.fieldKey,
       obscureText: _obscureText,
+      controller:  widget.controller,
       maxLength: 50,
-      onSaved: widget.onSaved,
-      validator: widget.validator,
-      onFieldSubmitted: widget.onFieldSubmitted,
       decoration: InputDecoration(
         border: const UnderlineInputBorder(),
         filled: false,
