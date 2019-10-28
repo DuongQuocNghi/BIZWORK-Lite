@@ -99,6 +99,12 @@ class CupertinoDemoTab1 extends StatelessWidget {
         trailing: trailingButtons,
       ),
       child: CupertinoScrollbar(
+        child: ListView(
+          children: <Widget>[
+            Tab2Header(),
+            ...buildTab2Conversation(),
+          ],
+        ),
       ),
     );
   }
