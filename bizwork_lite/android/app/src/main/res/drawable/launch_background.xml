@@ -1,12 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Modify this file to customize your launch splash screen -->
-<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:drawable="@android:color/white" />
-
-    <!-- You can insert your own image assets here -->
-    <!-- <item>
+<layer-list
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
         <bitmap
-            android:gravity="center"
-            android:src="@mipmap/launch_image" />
-    </item> -->
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/br_splash_screen"
+            android:scaleType="fitXY"
+            android:gravity="fill"
+            android:tileMode="disabled"/>
+    </item>
+    <item
+        android:gravity="center">
+        <vector
+            android:width="540dp"
+            android:height="1078dp"
+            android:viewportWidth="540"
+            android:viewportHeight="1078">
+            <path
+                android:pathData="M231.76,539.25l10.97,7.28l54.84,0l10.78,-7.33l-10.78,-7.33l-54.84,0l-10.97,7.38z"
+                android:fillColor="#fff"/>
+            <path
+                android:pathData="M240.8,528.19l0,-25.44l-16.35,-16.36l0,52.72l5.71,-3.59l10.64,-7.33z"
+                android:fillColor="#fff"/>
+            <path
+                android:pathData="M297.57,500.67l8.17,-8.02l-8.17,-8.29l-71.43,0l16.61,16.42l54.82,-0.11z"
+                android:fillColor="#fff"/>
+            <path
+                android:pathData="M240.8,550.09l-16.35,-10.79l0,52.38l16.35,-16.14l0,-25.45z"
+                android:fillColor="#fff"/>
+            <path
+                android:pathData="M242.7,577.65l-16.55,16.39l71.42,0l8.26,-8.2l-8.26,-8.12l-54.87,-0.07z"
+                android:fillColor="#fff"/>
+            <path
+                android:pathData="M315.85,539.11l0,-36.47l-8.09,-8.09l-8.24,8.09l0,25.55l10.62,7.33l5.56,3.68l-5.56,3.69l-10.62,7.33l0,25.46l8.28,8.2l8.05,-8l0,-36.58l0.15,-0.1l-0.15,-0.09z"
+                android:fillColor="#fff"/>
+        </vector>
+    </item>
 </layer-list>

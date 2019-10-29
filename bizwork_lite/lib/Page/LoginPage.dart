@@ -7,7 +7,7 @@ import 'package:bizwork_lite/Widget/PasswordField.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import 'HomePage.dart';
+import 'Home/HomePage.dart';
 
 class LoginPage extends StatefulWidget {
   @override
