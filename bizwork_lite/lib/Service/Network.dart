@@ -12,11 +12,11 @@ class Network {
 
     HttpClient httpClient = new HttpClient();
 
+    print('API Request: $body');
+
     HttpClientRequest request = await httpClient.postUrl(Uri.parse(url));
     request.headers.set('content-type', 'application/json');
     request.add(utf8.encode(json.encode(body)));
-
-    print('API Request: $body');
 
     HttpClientResponse response = await request.close();
     String reply = await response.transform(utf8.decoder).join();

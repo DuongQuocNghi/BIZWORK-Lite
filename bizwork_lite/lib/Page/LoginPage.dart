@@ -1,8 +1,11 @@
 import 'package:bizwork_lite/Service/Authorization/AuthorizationService.dart';
 import 'package:bizwork_lite/Service/Authorization/Dto/LoginRequestDto.dart';
 import 'package:bizwork_lite/Widget/AlertPopup.dart';
+import 'package:bizwork_lite/Widget/EntryField.dart';
+import 'package:bizwork_lite/Widget/GradientButton.dart';
 import 'package:bizwork_lite/Widget/PasswordField.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import 'HomePage.dart';
 
@@ -37,6 +40,8 @@ class _LoginPageState extends State<LoginPage> {
     super.initState();
   }
 
+  final String dogUrl = 'https://www.svgrepo.com/show/2046/dog.svg';
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -44,12 +49,13 @@ class _LoginPageState extends State<LoginPage> {
         child: ListView(
           padding: const EdgeInsets.symmetric(horizontal: 24.0),
           children: <Widget>[
-            const SizedBox(height: 300.0),
-            TextField(
+            const SizedBox(height: 150.0),
+            SvgPicture.asset("assets/images/banner_logo.svg"),
+            const SizedBox(height: 50.0),
+            EntryField(
               controller: _usernameController,
-              decoration: const InputDecoration(
-                labelText: 'Tên đăng nhập',
-              ),
+              fieldKey: GlobalKey<FormFieldState<String>>(),
+              labelText: 'Tên đăng nhập',
             ),
             const SizedBox(height: 12.0),
             PasswordField(
@@ -59,35 +65,20 @@ class _LoginPageState extends State<LoginPage> {
             ),
             const SizedBox(height: 30.0),
             Center(
-              child: RaisedButton(
-                onPressed: () {
-                  loginAction();
-                },
-                clipBehavior: Clip.antiAlias,
-                padding: const EdgeInsets.all(0),
-                shape: RoundedRectangleBorder(
-                  borderRadius: new BorderRadius.circular(25.0),
-                ),
-                child: Container(
-                  width: 200.0,
-                  height: 50.0,
-                  decoration: new BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: <Color>[
-                        Color(0xFF3EBFEA),
-                        Color(0xFF047DC1),
-                      ],
-                    ),
-                  ),
-                  child: new Center(
-                    child: new Text(
-                      'Đăng nhập',
-                      style: new TextStyle(fontSize: 18.0, color: Colors.white),
-                    ),
-                  ),
-                ),
-              ),
-            ),
+                child: GradientButton(
+                    onPressed: () {
+                      loginAction();
+                    },
+                    widthSize: 200,
+                    heightSize: 50,
+                    labelText: "Đăng nhập",
+                    cornerRadius: 25,
+                    colorLabelText: Colors.white,
+                    backroundColor: <Color>[
+                  Color(0xFF3EBFEA),
+                  Color(0xFF047DC1)
+                ])),
+            const SizedBox(height: 150.0),
           ],
         ),
       ),
