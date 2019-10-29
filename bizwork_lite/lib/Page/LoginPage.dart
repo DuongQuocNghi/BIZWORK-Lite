@@ -19,6 +19,7 @@ class _LoginPageState extends State<LoginPage> {
     try {
       var data = await AuthorizationService().login(
           LoginResquestDto(_usernameController.text, _passwordController.text));
+
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => HomePage()),

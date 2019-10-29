@@ -10,7 +10,7 @@ class MyApp extends StatelessWidget {
       onTap: () {
         FocusScope.of(context).requestFocus(new FocusNode());
       },
-      child: MaterialApp(home: LoginPage()),
+      child:new MaterialApp(home:new LoginPage()),
     );
   }
 }
