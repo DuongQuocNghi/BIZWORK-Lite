@@ -21,21 +21,21 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="LaunchImage" translatesAutoresizingMaskIntoConstraints="NO" id="E7r-nc-J8t">
+                            <imageView hidden="YES" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="LaunchImage" translatesAutoresizingMaskIntoConstraints="NO" id="r3r-Sg-4YZ">
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                             </imageView>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Logo" translatesAutoresizingMaskIntoConstraints="NO" id="Pcw-xi-ecK">
-                                <rect key="frame" x="174" y="297" width="66" height="78"/>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Logo" translatesAutoresizingMaskIntoConstraints="NO" id="E7r-nc-J8t">
+                                <rect key="frame" x="174" y="409" width="66" height="78"/>
                             </imageView>
                         </subviews>
-                        <color key="backgroundColor" red="0.84123501710000004" green="0.0078754365840000007" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" red="0.16862745098039217" green="0.73333333333333328" blue="0.90588235294117647" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="Pcw-xi-ecK" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="Mk3-mF-wrV"/>
-                            <constraint firstItem="E7r-nc-J8t" firstAttribute="top" secondItem="Ze5-6b-2t3" secondAttribute="top" id="WVO-nN-ogW"/>
-                            <constraint firstAttribute="trailing" secondItem="E7r-nc-J8t" secondAttribute="trailing" id="Xoo-Rp-bYt"/>
-                            <constraint firstItem="Pcw-xi-ecK" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" multiplier="3/4" id="ZoB-vS-VPr"/>
-                            <constraint firstAttribute="bottom" secondItem="E7r-nc-J8t" secondAttribute="bottom" id="iU5-5o-0zp"/>
-                            <constraint firstItem="E7r-nc-J8t" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" id="t1N-j3-Tzd"/>
+                            <constraint firstItem="E7r-nc-J8t" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="6eX-yi-jKA"/>
+                            <constraint firstItem="E7r-nc-J8t" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="KFx-pN-R4Q"/>
+                            <constraint firstAttribute="bottom" secondItem="r3r-Sg-4YZ" secondAttribute="bottom" id="htJ-X1-x5P"/>
+                            <constraint firstAttribute="trailing" secondItem="r3r-Sg-4YZ" secondAttribute="trailing" id="mSZ-iL-uCz"/>
+                            <constraint firstItem="r3r-Sg-4YZ" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" id="tzq-bB-qaN"/>
+                            <constraint firstItem="r3r-Sg-4YZ" firstAttribute="top" secondItem="Ze5-6b-2t3" secondAttribute="top" id="xUh-px-OUm"/>
                         </constraints>
                     </view>
                 </viewController>

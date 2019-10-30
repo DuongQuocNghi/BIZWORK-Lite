@@ -1,5 +1,8 @@
+import 'package:bizwork_lite/Db/DatabaseService.dart';
+import 'package:bizwork_lite/Db/Mode/UserAccount.dart';
 import 'package:bizwork_lite/Service/Authorization/AuthorizationService.dart';
 import 'package:bizwork_lite/Service/Authorization/Dto/LoginRequestDto.dart';
+import 'package:bizwork_lite/Service/Authorization/Dto/LoginResponseDto.dart';
 import 'package:bizwork_lite/Widget/AlertPopup.dart';
 import 'package:bizwork_lite/Widget/EntryField.dart';
 import 'package:bizwork_lite/Widget/GradientButton.dart';
@@ -18,15 +21,40 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
+  void GoToHome(LoginResponseDto data) async {
+    try {
+      await SaveAccount();
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => HomePage()),
+      );
+    } catch (ex) {
+      print(ex);
+    }
+  }
+
+  Future<void> SaveAccount() async {
+    return AlertPopup().messageAlert2Press(context ,"Bạn có muốn lưu mật khẩu", "Đồng ý", "Đóng").then((bool value) async{
+      if(value){
+        var acc = UserAccount(userName: _usernameController.text,password: _passwordController.text);
+
+        var service = DatabaseService();
+        await service.createTable(acc);
+        await service.insertData(acc);
+
+        print("SaveAccount Done");
+      }
+    });
+  }
+
   void loginAction() async {
     try {
       var data = await AuthorizationService().login(
           LoginResquestDto(_usernameController.text, _passwordController.text));
 
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => HomePage()),
-      );
+      if (data != null) {
+        GoToHome(data);
+      }
     } on Exception catch (ex) {
       AlertPopup().messageAlertPress(
           context, ex.toString().replaceAll("Exception: ", ""));
@@ -40,8 +68,6 @@ class _LoginPageState extends State<LoginPage> {
     super.initState();
   }
 
-  final String dogUrl = 'https://www.svgrepo.com/show/2046/dog.svg';
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -54,13 +80,11 @@ class _LoginPageState extends State<LoginPage> {
             const SizedBox(height: 50.0),
             EntryField(
               controller: _usernameController,
-              fieldKey: GlobalKey<FormFieldState<String>>(),
               labelText: 'Tên đăng nhập',
             ),
             const SizedBox(height: 12.0),
             PasswordField(
               controller: _passwordController,
-              fieldKey: GlobalKey<FormFieldState<String>>(),
               labelText: 'Mật khẩu',
             ),
             const SizedBox(height: 30.0),
@@ -75,13 +99,14 @@ class _LoginPageState extends State<LoginPage> {
                     cornerRadius: 25,
                     colorLabelText: Colors.white,
                     backroundColor: <Color>[
-                  Color(0xFF3EBFEA),
-                  Color(0xFF047DC1)
-                ])),
+                      Color(0xFF3EBFEA),
+                      Color(0xFF047DC1)
+                    ])),
             const SizedBox(height: 150.0),
           ],
         ),
       ),
     );
   }
+
 }
