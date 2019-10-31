@@ -1,4 +1,6 @@
-
+import 'package:bizwork_lite/Db/DatabaseService.dart';
+import 'package:bizwork_lite/Db/Mode/UserAccount.dart';
+import 'package:bizwork_lite/Widget/AlertPopup.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -7,6 +9,10 @@ import 'CheckInViewHomeTab.dart';
 import 'TaskViewHomeTab.dart';
 
 class HomePage extends StatefulWidget {
+  final UserAccount account;
+
+  HomePage({this.account});
+
   @override
   _HomePageState createState() => _HomePageState();
 }
@@ -15,6 +21,27 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance
+        .addPostFrameCallback((_) => SaveAccount(context));
+  }
+
+  Future<void> SaveAccount(BuildContext context) async {
+    return AlertPopup()
+        .messageAlert2Press(
+            context, "Bạn có muốn lưu mật khẩu", "Đồng ý", "Đóng")
+        .then((bool value) async {
+      try {
+        if (value) {
+          var service = DatabaseService();
+          await service.createTable(widget.account);
+          await service.insertData(widget.account);
+
+          print("SaveAccount Done");
+        }
+      } catch (ex) {
+        print(ex);
+      }
+    });
   }
 
   @override
@@ -70,6 +97,3 @@ class _HomePageState extends State<HomePage> {
     );
   }
 }
-
-
-

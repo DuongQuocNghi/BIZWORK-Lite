@@ -15,57 +15,21 @@ import 'Home/HomePage.dart';
 class LoginPage extends StatefulWidget {
   @override
   _LoginPageState createState() => _LoginPageState();
+
 }
 
 class _LoginPageState extends State<LoginPage> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-
-  void GoToHome(LoginResponseDto data) async {
-    try {
-      await SaveAccount();
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => HomePage()),
-      );
-    } catch (ex) {
-      print(ex);
-    }
-  }
-
-  Future<void> SaveAccount() async {
-    return AlertPopup().messageAlert2Press(context ,"Bạn có muốn lưu mật khẩu", "Đồng ý", "Đóng").then((bool value) async{
-      if(value){
-        var acc = UserAccount(userName: _usernameController.text,password: _passwordController.text);
-
-        var service = DatabaseService();
-        await service.createTable(acc);
-        await service.insertData(acc);
-
-        print("SaveAccount Done");
-      }
-    });
-  }
-
-  void loginAction() async {
-    try {
-      var data = await AuthorizationService().login(
-          LoginResquestDto(_usernameController.text, _passwordController.text));
-
-      if (data != null) {
-        GoToHome(data);
-      }
-    } on Exception catch (ex) {
-      AlertPopup().messageAlertPress(
-          context, ex.toString().replaceAll("Exception: ", ""));
-    }
-  }
+  List<UserAccount> userAccounts = List<UserAccount>();
 
   @override
   void initState() {
+    super.initState();
     _usernameController.text = "Biz00017";
     _passwordController.text = "1234567";
-    super.initState();
+    WidgetsBinding.instance
+        .addPostFrameCallback((_) => PageLoadFinish(context));
   }
 
   @override
@@ -107,6 +71,39 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ),
     );
+  }
+
+  void GoToHome(LoginResponseDto data) async {
+    try {
+      var acc = UserAccount(userName: _usernameController.text,password: _passwordController.text);
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => HomePage(account: acc)),
+      );
+    } catch (ex) {
+      print(ex);
+    }
+  }
+
+  void loginAction() async {
+    try {
+      var data = await AuthorizationService().login(
+          LoginResquestDto(_usernameController.text, _passwordController.text));
+
+      if (data != null) {
+        GoToHome(data);
+      }
+    } on Exception catch (ex) {
+      AlertPopup().messageAlertPress(
+          context, ex.toString().replaceAll("Exception: ", ""));
+    }
+  }
+
+  PageLoadFinish(BuildContext context) {
+    var dbService = DatabaseService();
+    dbService.getData<UserAccount>(UserAccount()).then((List<UserAccount> data){
+      userAccounts = data;
+    });
   }
 
 }
