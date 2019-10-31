@@ -21,27 +21,28 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance
-        .addPostFrameCallback((_) => SaveAccount(context));
+    WidgetsBinding.instance.addPostFrameCallback((_) => SaveAccount(context));
   }
 
   Future<void> SaveAccount(BuildContext context) async {
-    return AlertPopup()
-        .messageAlert2Press(
-            context, "Bạn có muốn lưu mật khẩu", "Đồng ý", "Đóng")
-        .then((bool value) async {
-      try {
-        if (value) {
-          var service = DatabaseService();
-          await service.createTable(widget.account);
-          await service.insertData(widget.account);
+    if (widget.account != null) {
+      AlertPopup()
+          .messageAlert2Press(
+              context, "Bạn có muốn lưu mật khẩu", "Đồng ý", "Đóng")
+          .then((bool value) async {
+        try {
+          if (value) {
+            var service = DatabaseService();
+            await service.createTable(widget.account);
+            await service.addData(widget.account);
 
-          print("SaveAccount Done");
+            print("SaveAccount Done");
+          }
+        } catch (ex) {
+          print(ex);
         }
-      } catch (ex) {
-        print(ex);
-      }
-    });
+      });
+    }
   }
 
   @override

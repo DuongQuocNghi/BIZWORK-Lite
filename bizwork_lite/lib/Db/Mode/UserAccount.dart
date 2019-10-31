@@ -4,8 +4,13 @@ import '../SQLFunction.dart';
 class UserAccount implements SQLFunction{
   final String userName;
   final String password;
+  final DateTime timeCreated;
 
-  UserAccount({this.userName, this.password});
+  UserAccount({this.userName, this.password, this.timeCreated});
+
+  DateTime getTimeCreated() {
+    return timeCreated ?? DateTime(2018);
+  }
 
   @override
   Map<String, dynamic> toMap() {

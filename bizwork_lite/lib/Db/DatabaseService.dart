@@ -38,25 +38,11 @@ class DatabaseService {
     }
   }
 
-  Future<void> insertData(SQLFunction input) async {
-    try {
-      await openService();
-      await db.insert(
-        input.getNameTableSQL(),
-        input.toMap(),
-        conflictAlgorithm: ConflictAlgorithm.replace,
-      );
-      await closeService();
-    } catch (ex) {
-      print(ex);
-    }
-  }
-
   Future<List<T>> getData<T>(SQLFunction input) async {
     try {
       await openService();
       final List<Map<String, dynamic>> maps =
-          await db.query(input.getNameTableSQL());
+      await db.query(input.getNameTableSQL());
       await closeService();
 
       return List.generate(maps.length, (i) {
@@ -68,17 +54,88 @@ class DatabaseService {
     return List<T>();
   }
 
-  Future<void> updateData(SQLFunction input) async {
+  Future<void> addData(SQLFunction input) async {
+    try {
+      await openService();
+      var c = await checkData(input, initService: false);
+      if (c > 0){
+        print("addData - updateData");
+        updateData(input,initService: false);
+      }else{
+        print("addData - insertData");
+        insertData(input,initService: false);
+      }
+      await closeService();
+    } catch (ex) {
+      print(ex);
+    }
+  }
+
+  Future<int> checkData(SQLFunction input, {bool initService = true,String keyCompare = "like" }) async {
     try {
       var key = input.getPrimaryKey();
-      await openService();
+      if (initService) {
+        await openService();
+      }
+
+      var data = await db.query(
+        input.getNameTableSQL(),
+        where: "$key $keyCompare ?",
+        whereArgs: [input.getValuePrimaryKey()],
+      );
+      print(data);
+
+      if (initService) {
+        await closeService();
+      }
+      return data?.length;
+    } catch (ex) {
+      print(ex);
+    }
+    return -1;
+  }
+
+  Future<void> insertData(SQLFunction input, {bool initService = true}) async {
+    try {
+
+      if (initService) {
+        await openService();
+      }
+
+      await db.insert(
+        input.getNameTableSQL(),
+        input.toMap(),
+        conflictAlgorithm: ConflictAlgorithm.replace,
+      );
+
+      if (initService) {
+        await closeService();
+      }
+
+    } catch (ex) {
+      print(ex);
+    }
+  }
+
+  Future<void> updateData(SQLFunction input, {bool initService = true,String keyCompare = "like"}) async {
+    try {
+      var key = input.getPrimaryKey();
+
+      if (initService) {
+        await openService();
+      }
+
       await db.update(
         input.getNameTableSQL(),
         input.toMap(),
-        where: "$key = ?",
+        where: "$key $keyCompare ?",
         whereArgs: [input.getValuePrimaryKey()],
       );
-      await closeService();
+
+      if (initService) {
+        await closeService();
+      }
+
     } catch (ex) {
       print(ex);
     }
