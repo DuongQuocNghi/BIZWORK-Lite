@@ -8,6 +8,7 @@ import 'package:bizwork_lite/Widget/AutoCompleteTextField.dart';
 import 'package:bizwork_lite/Widget/GradientButton.dart';
 import 'package:bizwork_lite/Widget/PasswordField.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import 'Home/HomePage.dart';
@@ -119,6 +120,7 @@ class _LoginPageState extends State<LoginPage> {
                 child: _iconLoading,
               ),
             ),
+            Text(_batteryLevel),
             const SizedBox(height: 50.0),
           ],
         ),
@@ -152,7 +154,26 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
+  static const platform = const MethodChannel('com.example.bizwork_lite/battery');
+  String _batteryLevel = 'Unknown battery level.';
+  Future<void> _getBatteryLevel() async {
+    String batteryLevel;
+    try {
+      final int result = await platform.invokeMethod('getBatteryLevel');
+      batteryLevel = 'Battery level at $result % .';
+    } on PlatformException catch (e) {
+      batteryLevel = "Failed to get battery level: '${e.message}'.";
+    }
+
+    setState(() {
+      _batteryLevel = batteryLevel;
+    });
+  }
+
+
   void loginAction() async {
+    _getBatteryLevel();
+    return;
     if (isBusy) {
       return;
     }
