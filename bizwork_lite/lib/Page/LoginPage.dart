@@ -158,6 +158,7 @@ class _LoginPageState extends State<LoginPage> {
     }
 
     iconLoading = CircularProgressIndicator(strokeWidth: 2);
+
     try {
       var data = await AuthorizationService().login(
           LoginResquestDto(_usernameController.text, _passwordController.text));
@@ -165,12 +166,13 @@ class _LoginPageState extends State<LoginPage> {
       if (data != null) {
         goToHome(data);
       }
-
       iconLoading = null;
     } on Exception catch (ex) {
-      await MyPopup().messageAlertPress(
+      Future.delayed(Duration(milliseconds: 500)).then((_) {
+        iconLoading = null;
+      });
+      MyPopup().messageAlertPress(
           context, ex.toString().replaceAll("Exception: ", ""));
-      iconLoading = null;
     }
   }
 
