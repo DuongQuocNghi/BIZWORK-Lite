@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 
-class AlertPopup {
+class MyPopup {
   void messageAlertPress(BuildContext context, String message) {
     showDialog(
       context: context,
@@ -13,6 +13,15 @@ class AlertPopup {
             onPressed: () => Navigator.pop(context, 'Cancel'),
           ),
         ],
+      ),
+    );
+  }
+
+  void loadingPopup(BuildContext context) {
+    showDialog(
+      context: context,
+      child: CupertinoAlertDialog(
+        title: CupertinoActivityIndicator(),
       ),
     );
   }
@@ -41,6 +50,8 @@ class AlertPopup {
   }
 
   Future<T> showDialog<T>({BuildContext context, Widget child}) {
+    FocusScope.of(context).requestFocus(FocusNode());
+    FocusScope.of(context).unfocus();
     return showCupertinoDialog<T>(
       context: context,
       builder: (BuildContext context) => child,

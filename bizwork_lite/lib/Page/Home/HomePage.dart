@@ -1,6 +1,6 @@
 import 'package:bizwork_lite/Db/DatabaseService.dart';
 import 'package:bizwork_lite/Db/Mode/UserAccount.dart';
-import 'package:bizwork_lite/Widget/AlertPopup.dart';
+import 'package:bizwork_lite/Widget/MyPopup.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -26,7 +26,7 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> SaveAccount(BuildContext context) async {
     if (widget.account != null) {
-      AlertPopup()
+      MyPopup()
           .messageAlert2Press(
               context, "Bạn có muốn lưu mật khẩu", "Đồng ý", "Đóng")
           .then((bool value) async {

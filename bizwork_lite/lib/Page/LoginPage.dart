@@ -3,7 +3,8 @@ import 'package:bizwork_lite/Db/Mode/UserAccount.dart';
 import 'package:bizwork_lite/Service/Authorization/AuthorizationService.dart';
 import 'package:bizwork_lite/Service/Authorization/Dto/LoginRequestDto.dart';
 import 'package:bizwork_lite/Service/Authorization/Dto/LoginResponseDto.dart';
-import 'package:bizwork_lite/Widget/AlertPopup.dart';
+import 'package:bizwork_lite/Widget/MyDialog.dart';
+import 'package:bizwork_lite/Widget/MyPopup.dart';
 import 'package:bizwork_lite/Widget/AutoCompleteTextField.dart';
 import 'package:bizwork_lite/Widget/GradientButton.dart';
 import 'package:bizwork_lite/Widget/PasswordField.dart';
@@ -81,6 +82,7 @@ class _LoginPageState extends State<LoginPage> {
                 }),
             const SizedBox(height: 12.0),
             PasswordField(
+              fieldKey: null,
               controller: _passwordController,
               labelText: 'Mật khẩu',
             ),
@@ -138,20 +140,21 @@ class _LoginPageState extends State<LoginPage> {
     if (isBusy) {
       return;
     }
+
     isBusy = true;
     try {
       var data = await AuthorizationService().login(
           LoginResquestDto(_usernameController.text, _passwordController.text));
 
       if (data != null) {
-        goToHome(data);
+//        goToHome(data);
       }
 
       isBusy = false;
     } on Exception catch (ex) {
-      AlertPopup().messageAlertPress(
-          context, ex.toString().replaceAll("Exception: ", ""));
 
+      MyPopup().messageAlertPress(
+          context, ex.toString().replaceAll("Exception: ", ""));
       isBusy = false;
     }
   }
