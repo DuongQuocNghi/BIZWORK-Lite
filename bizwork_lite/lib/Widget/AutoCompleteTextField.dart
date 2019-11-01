@@ -27,7 +27,7 @@ class _AutoCompleteTextFieldState extends State<AutoCompleteTextField> {
   Icon _iconWidget = new Icon(null);
   static final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  set errorWidget(Icon value) {
+  set iconWidget(Icon value) {
     setState(() {
       _iconWidget = value;
     });
@@ -72,7 +72,7 @@ class _AutoCompleteTextFieldState extends State<AutoCompleteTextField> {
 
   void _textChange() {
     try {
-      errorWidget = new Icon(
+      iconWidget = new Icon(
         widget.controller.text.isEmpty ? null : Icons.clear,
       );
     } catch (ex) {

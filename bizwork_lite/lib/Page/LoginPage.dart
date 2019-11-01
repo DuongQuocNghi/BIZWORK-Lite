@@ -3,7 +3,6 @@ import 'package:bizwork_lite/Db/Mode/UserAccount.dart';
 import 'package:bizwork_lite/Service/Authorization/AuthorizationService.dart';
 import 'package:bizwork_lite/Service/Authorization/Dto/LoginRequestDto.dart';
 import 'package:bizwork_lite/Service/Authorization/Dto/LoginResponseDto.dart';
-import 'package:bizwork_lite/Widget/MyDialog.dart';
 import 'package:bizwork_lite/Widget/MyPopup.dart';
 import 'package:bizwork_lite/Widget/AutoCompleteTextField.dart';
 import 'package:bizwork_lite/Widget/GradientButton.dart';
@@ -19,9 +18,20 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  Widget _iconLoading;
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   List<UserAccount> userAccounts = List();
+
+  set iconLoading(Widget value) {
+    setState(() {
+      _iconLoading = value;
+    });
+  }
+
+  get isBusy{
+    return _iconLoading != null ? true : false;
+  }
 
   @override
   void initState() {
@@ -101,6 +111,14 @@ class _LoginPageState extends State<LoginPage> {
                   Color(0xFF3EBFEA),
                   Color(0xFF047DC1)
                 ])),
+            const SizedBox(height: 15.0),
+            Center(
+              child: Container(
+                width: 20,
+                height: 20,
+                child: _iconLoading,
+              ),
+            ),
             const SizedBox(height: 50.0),
           ],
         ),
@@ -134,14 +152,12 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-  bool isBusy = false;
-
   void loginAction() async {
     if (isBusy) {
       return;
     }
 
-    isBusy = true;
+    iconLoading = CircularProgressIndicator(strokeWidth: 2);
     try {
       var data = await AuthorizationService().login(
           LoginResquestDto(_usernameController.text, _passwordController.text));
@@ -150,12 +166,11 @@ class _LoginPageState extends State<LoginPage> {
         goToHome(data);
       }
 
-      isBusy = false;
+      iconLoading = null;
     } on Exception catch (ex) {
-
-      MyPopup().messageAlertPress(
+      await MyPopup().messageAlertPress(
           context, ex.toString().replaceAll("Exception: ", ""));
-      isBusy = false;
+      iconLoading = null;
     }
   }
 

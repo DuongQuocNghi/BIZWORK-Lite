@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 
 class MyPopup {
-  void messageAlertPress(BuildContext context, String message) {
-    showDialog(
+  Future<void> messageAlertPress(BuildContext context, String message) {
+    return showDialog(
       context: context,
       child: CupertinoAlertDialog(
         title: Text(message),
