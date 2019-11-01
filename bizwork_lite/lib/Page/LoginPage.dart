@@ -147,7 +147,7 @@ class _LoginPageState extends State<LoginPage> {
           LoginResquestDto(_usernameController.text, _passwordController.text));
 
       if (data != null) {
-//        goToHome(data);
+        goToHome(data);
       }
 
       isBusy = false;
