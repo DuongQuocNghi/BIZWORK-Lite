@@ -30,7 +30,7 @@ class _LoginPageState extends State<LoginPage> {
     });
   }
 
-  get isBusy{
+  get isBusy {
     return _iconLoading != null ? true : false;
   }
 
@@ -154,25 +154,21 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-  static const platform = const MethodChannel('com.example.bizwork_lite/battery');
-  String _batteryLevel = 'Unknown battery level.';
-  Future<void> _getBatteryLevel() async {
-    String batteryLevel;
-    try {
-      final int result = await platform.invokeMethod('getBatteryLevel');
-      batteryLevel = 'Battery level at $result % .';
-    } on PlatformException catch (e) {
-      batteryLevel = "Failed to get battery level: '${e.message}'.";
-    }
+  var platform = const MethodChannel('com.example.bizwork_lite/platform_view');
+  var settingView = 'switchSettingView';
 
-    setState(() {
-      _batteryLevel = batteryLevel;
-    });
+  String _batteryLevel = 'Unknown battery level.';
+
+  Future<void> _launchPlatformSetting() async {
+    try {
+      final result = await platform.invokeMethod(settingView);
+    } on PlatformException catch (e) {
+      print(e);
+    }
   }
 
-
   void loginAction() async {
-    _getBatteryLevel();
+    _launchPlatformSetting();
     return;
     if (isBusy) {
       return;
