@@ -19,6 +19,10 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+
+  var platform = const MethodChannel('com.example.bizwork_lite/platform_view');
+  var settingView = 'switchSettingView';
+
   Widget _iconLoading;
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
@@ -101,7 +105,7 @@ class _LoginPageState extends State<LoginPage> {
             Center(
                 child: GradientButton(
                     onPressed: () {
-                      loginAction();
+                      _loginAction();
                     },
                     widthSize: 200,
                     heightSize: 50,
@@ -120,7 +124,21 @@ class _LoginPageState extends State<LoginPage> {
                 child: _iconLoading,
               ),
             ),
-            Text(_batteryLevel),
+            const SizedBox(height: 15.0),
+            Center(
+                child: GradientButton(
+                    onPressed: () {
+                      _launchPlatformSetting();
+                    },
+                    widthSize: 200,
+                    heightSize: 50,
+                    labelText: "Native View",
+                    cornerRadius: 25,
+                    colorLabelText: Colors.white,
+                    backroundColor: <Color>[
+                      Color(0xFF3EBFEA),
+                      Color(0xFF047DC1)
+                    ])),
             const SizedBox(height: 50.0),
           ],
         ),
@@ -154,11 +172,6 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-  var platform = const MethodChannel('com.example.bizwork_lite/platform_view');
-  var settingView = 'switchSettingView';
-
-  String _batteryLevel = 'Unknown battery level.';
-
   Future<void> _launchPlatformSetting() async {
     try {
       final result = await platform.invokeMethod(settingView);
@@ -167,9 +180,7 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-  void loginAction() async {
-    _launchPlatformSetting();
-    return;
+  void _loginAction() async {
     if (isBusy) {
       return;
     }
