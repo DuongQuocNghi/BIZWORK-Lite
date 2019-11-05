@@ -38,6 +38,10 @@
             android:name=".BizworkService"
             android:enabled="true"
             android:exported="true"/>
+        <service
+            android:name=".LocationService"
+            android:enabled="true"
+            android:exported="true"/>
     </application>
 
 </manifest>

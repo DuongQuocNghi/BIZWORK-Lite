@@ -17,9 +17,6 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 
-
-
-
 class BizworkService : Service() {
 
     override fun onBind(intent: Intent?): IBinder? {
