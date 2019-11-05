@@ -1,6 +1,5 @@
 package com.example.bizwork_lite
 
-import android.Manifest
 import android.app.Notification
 import android.app.Service
 import android.content.Intent
@@ -15,147 +14,73 @@ import android.content.Context
 import android.graphics.Color
 import android.os.Build
 import android.widget.Toast
-import android.os.Bundle
-import android.location.LocationListener
-import android.location.LocationManager
-import android.content.pm.PackageManager
-import android.location.Location
-import androidx.core.app.ActivityCompat
-
-
+import androidx.annotation.RequiresApi
+import androidx.core.app.NotificationCompat
 
 
 
 
 class BizworkService : Service() {
 
-    val BROADCAST_ACTION = "Hello World"
-    private val TWO_MINUTES = 1000 * 60 * 2
-    var locationManager: LocationManager? = null
-    var listener: MyLocationListener? = null
-    var previousBestLocation: Location? = null
-
-    var intent: Intent? = null
-    var counter = 0
-
-    override fun onCreate() {
-        super.onCreate()
-        intent = Intent(BROADCAST_ACTION)
-    }
-
-    override fun onStart(intent: Intent, startId: Int) {
-        locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        listener = MyLocationListener()
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            return
-        }
-        locationManager?.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 4000, 0f, listener as LocationListener)
-        locationManager?.requestLocationUpdates(LocationManager.GPS_PROVIDER, 4000, 0f, listener)
-    }
-
-    override fun onBind(intent: Intent): IBinder? {
+    override fun onBind(intent: Intent?): IBinder? {
         return null
     }
 
-    protected fun isBetterLocation(location: Location, currentBestLocation: Location?): Boolean {
-        if (currentBestLocation == null) {
-            // A new location is always better than no location
-            return true
-        }
-
-        // Check whether the new location fix is newer or older
-        val timeDelta = location.getTime() - currentBestLocation!!.getTime()
-        val isSignificantlyNewer = timeDelta > TWO_MINUTES
-        val isSignificantlyOlder = timeDelta < -TWO_MINUTES
-        val isNewer = timeDelta > 0
-
-        // If it's been more than two minutes since the current location, use the new location
-        // because the user has likely moved
-        if (isSignificantlyNewer) {
-            return true
-            // If the new location is more than two minutes older, it must be worse
-        } else if (isSignificantlyOlder) {
-            return false
-        }
-
-        // Check whether the new location fix is more or less accurate
-        val accuracyDelta = (location.getAccuracy() - currentBestLocation!!.getAccuracy()) as Int
-        val isLessAccurate = accuracyDelta > 0
-        val isMoreAccurate = accuracyDelta < 0
-        val isSignificantlyLessAccurate = accuracyDelta > 200
-
-        // Check if the old and new location are from the same provider
-        val isFromSameProvider = isSameProvider(location.getProvider(),
-                currentBestLocation!!.getProvider())
-
-        // Determine location quality using a combination of timeliness and accuracy
-        if (isMoreAccurate) {
-            return true
-        } else if (isNewer && !isLessAccurate) {
-            return true
-        } else if (isNewer && !isSignificantlyLessAccurate && isFromSameProvider) {
-            return true
-        }
-        return false
+    override fun onCreate() {
+        super.onCreate()
     }
 
+    public final var mHandler = Handler()
 
-    /** Checks whether two providers are the same  */
-    private fun isSameProvider(provider1: String?, provider2: String?): Boolean {
-        return if (provider1 == null) {
-            provider2 == null
-        } else provider1 == provider2
+    override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
+        Toast.makeText(applicationContext, "Service is running", Toast.LENGTH_SHORT).show()
+
+        mHandler.postDelayed(object : Runnable {
+            override fun run() {
+                Log.d("BizworkService", "run: " + Date().toString())
+                mHandler.postDelayed(this, 1000)
+            }
+        }, 1000)
+
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            startForeground()
+        }
+
+        Log.d("BizworkServiceTest", "run: " + Date().toString())
+        return START_NOT_STICKY
     }
-
 
     override fun onDestroy() {
-        // handler.removeCallbacks(sendUpdatesToUI);
         super.onDestroy()
-        Log.v("STOP_SERVICE", "DONE")
-        locationManager?.removeUpdates(listener)
+        Toast.makeText(applicationContext, "Service is stop", Toast.LENGTH_SHORT).show()
     }
 
-    fun performOnBackgroundThread(runnable: Runnable): Thread {
-        val t = object : Thread() {
-            override fun run() {
-                try {
-                    runnable.run()
-                } finally {
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun startForeground() {
+        val channelId = createNotificationChannel("my_service", "My Background Service")
 
-                }
-            }
-        }
-        t.start()
-        return t
+        val notificationBuilder = NotificationCompat.Builder(this, channelId )
+        val notification = notificationBuilder.setOngoing(true)
+                .setContentTitle("Title")
+                .setContentText("text")
+                .setSmallIcon(R.drawable.stat_notify_sync)
+                .setCategory(Notification.CATEGORY_SERVICE)
+                .build()
+
+        startForeground(101, notification)
     }
 
-    inner class MyLocationListener : LocationListener {
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun createNotificationChannel(channelId: String, channelName: String): String{
 
-        override fun onLocationChanged(loc: Location) {
-            Toast.makeText(applicationContext, "Latitude: " + loc.getLatitude() + " -- Longitude: " + loc.getLongitude(), Toast.LENGTH_SHORT).show()
-            Log.i("*****", "Location changed")
-            if (isBetterLocation(loc, previousBestLocation)) {
-                loc.getLatitude()
-                loc.getLongitude()
-                intent?.putExtra("Latitude", loc.getLatitude())
-                intent?.putExtra("Longitude", loc.getLongitude())
-                intent?.putExtra("Provider", loc.getProvider())
-                sendBroadcast(intent)
+        val chan = NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_NONE)
+        chan.lightColor = Color.BLUE
+        chan.lockscreenVisibility = Notification.VISIBILITY_PRIVATE
 
-            }
-        }
+        val service = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        service.createNotificationChannel(chan)
 
-        override fun onStatusChanged(provider: String, status: Int, extras: Bundle) {
-
-        }
-
-        override fun onProviderDisabled(provider: String) {
-            Toast.makeText(applicationContext, "Gps Disabled", Toast.LENGTH_SHORT).show()
-        }
-
-
-        override fun onProviderEnabled(provider: String) {
-            Toast.makeText(applicationContext, "Gps Enabled", Toast.LENGTH_SHORT).show()
-        }
+        return channelId
     }
 }

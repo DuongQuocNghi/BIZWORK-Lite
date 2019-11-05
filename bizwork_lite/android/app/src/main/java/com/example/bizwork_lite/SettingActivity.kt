@@ -10,7 +10,6 @@ import android.widget.Button
 
 class SettingActivity : Activity() {
 
-
     internal var btn_start: Button? = null
     internal var btn_stop: Button? = null
 
