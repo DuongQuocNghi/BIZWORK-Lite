@@ -31,10 +31,28 @@
                         <action selector="back_Action:" destination="-1" eventType="touchUpInside" id="B5Z-WH-IpL"/>
                     </connections>
                 </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vSQ-bf-xAr">
+                    <rect key="frame" x="163" y="363" width="88" height="30"/>
+                    <state key="normal" title="Start Update"/>
+                    <connections>
+                        <action selector="start_Action:" destination="-1" eventType="touchUpInside" id="zzN-kc-edy"/>
+                    </connections>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kYp-g7-eWu">
+                    <rect key="frame" x="163.5" y="503" width="87" height="30"/>
+                    <state key="normal" title="Stop Update"/>
+                    <connections>
+                        <action selector="stop_Action:" destination="-1" eventType="touchUpInside" id="egI-Bx-KzZ"/>
+                    </connections>
+                </button>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
+                <constraint firstItem="kYp-g7-eWu" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="Dv6-pT-Xot"/>
+                <constraint firstItem="vSQ-bf-xAr" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="DvO-zp-uaS"/>
                 <constraint firstItem="swl-EB-o0D" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="MYS-dZ-YDq"/>
+                <constraint firstItem="kYp-g7-eWu" firstAttribute="top" secondItem="swl-EB-o0D" secondAttribute="bottom" constant="30" id="PKb-bE-lhZ"/>
+                <constraint firstItem="swl-EB-o0D" firstAttribute="top" secondItem="vSQ-bf-xAr" secondAttribute="bottom" constant="30" id="gOk-bX-IK1"/>
                 <constraint firstItem="swl-EB-o0D" firstAttribute="centerY" secondItem="i5M-Pr-FkT" secondAttribute="centerY" id="qZz-ng-pbw"/>
             </constraints>
             <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>

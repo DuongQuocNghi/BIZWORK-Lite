@@ -24,11 +24,13 @@ class AutoCompleteTextField<T> extends StatefulWidget {
 }
 
 class _AutoCompleteTextFieldState extends State<AutoCompleteTextField> {
-  Icon _iconWidget = new Icon(null);
+  FocusNode _focusNodeTextField = new FocusNode();
+  Icon _iconWidget = Icon(null);
   static final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   set iconWidget(Icon value) {
     setState(() {
+      print(value);
       _iconWidget = value;
     });
   }
@@ -37,6 +39,9 @@ class _AutoCompleteTextFieldState extends State<AutoCompleteTextField> {
   void initState() {
     super.initState();
     widget.controller?.addListener(_textChange);
+    _focusNodeTextField.addListener(() {
+      updateIconClear();
+    });
   }
 
   @override
@@ -49,6 +54,7 @@ class _AutoCompleteTextFieldState extends State<AutoCompleteTextField> {
           hideOnError: true,
           getImmediateSuggestions: true,
           textFieldConfiguration: TextFieldConfiguration(
+              focusNode: _focusNodeTextField,
               controller: widget.controller,
               decoration: InputDecoration(
                 labelText: widget.labelText,
@@ -71,10 +77,18 @@ class _AutoCompleteTextFieldState extends State<AutoCompleteTextField> {
   }
 
   void _textChange() {
+    updateIconClear();
+  }
+
+  updateIconClear() {
     try {
-      iconWidget = new Icon(
-        widget.controller.text.isEmpty ? null : Icons.clear,
-      );
+      if (_focusNodeTextField.hasFocus) {
+        iconWidget = Icon(
+          widget.controller.text.isEmpty ? null : Icons.clear,
+        );
+      } else {
+        iconWidget = Icon(null);
+      }
     } catch (ex) {
       print(ex);
     }

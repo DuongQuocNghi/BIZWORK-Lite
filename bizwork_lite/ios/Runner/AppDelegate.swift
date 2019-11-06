@@ -12,6 +12,12 @@ import Flutter
     _ application: UIApplication,
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 
+    UNUserNotificationCenter.current().delegate = self
+    UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { (granted, err) in
+        print("granted: (\(granted)")
+    }
+
+    
     let controller : FlutterViewController = window?.rootViewController as! FlutterViewController
     let batteryChannel = FlutterMethodChannel(name: CHANNEL,
                                               binaryMessenger: controller.binaryMessenger)
@@ -23,14 +29,6 @@ import Flutter
             DispatchQueue.main.async {
                 controller.present(SettingViewController(), animated: true, completion: nil)
             }
-//            PlatformViewController* platformViewController =
-//                [controller.storyboard instantiateViewControllerWithIdentifier:@"PlatformView"];
-//            platformViewController.counter = ((NSNumber*)call.arguments).intValue;
-//            platformViewController.delegate = self;
-//            UINavigationController* navigationController =
-//                [[UINavigationController alloc] initWithRootViewController:platformViewController];
-//            navigationController.navigationBar.topItem.title = @"Platform View";
-//            [controller presentViewController:navigationController animated:NO completion:nil];
         } else {
             result(FlutterMethodNotImplemented);
         }
@@ -39,4 +37,8 @@ import Flutter
     GeneratedPluginRegistrant.register(with: self)
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }
+    
+    override func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        completionHandler([.alert, .sound])
+    }
 }
